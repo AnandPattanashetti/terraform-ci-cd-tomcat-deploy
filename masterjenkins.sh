@@ -1,25 +1,27 @@
 #!/bin/bash
-# Add Jenkins repository
-sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-  https://pkg.jenkins.io/debian/jenkins.io-2023.key
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-  https://pkg.jenkins.io/debian binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update
-sudo apt-get install jenkins
-# Update and install dependencies
-sudo apt-get update
-sudo apt-get upgrade -y
+# Ensure that your software packages are up to date on your instance by using the following command
+sudo yum update –y
 
-# Install Jenkins
-sudo apt-get install jenkins -y
-# Start and enable Jenkins service
-sudo systemctl start jenkins
+# Add the Jenkins repo using the following command:
+sudo wget -O /etc/yum.repos.d/jenkins.repo     https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+# Import a key file from Jenkins-CI to enable installation from the package:
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+# Step 3: upgrade
+sudo yum upgrade
+
+# Install Java (Amazon Linux 2023):
+sudo dnf install java-17-amazon-corretto -y
+
+#Install Jenkins:
+sudo yum install jenkins -y
+
+# Enable the Jenkins service to start at boot:
 sudo systemctl enable jenkins
-# Install Git
-sudo apt-get install git -y
-# Set hostname
-sudo hostnamectl set-hostname Master-server
 
+# Start Jenkins as a service:
+sudo systemctl start jenkins
 
-sudo apt-get install openjdk-11-jdk -y
+# You can check the status of the Jenkins service using the command:
+sudo systemctl status jenkins
