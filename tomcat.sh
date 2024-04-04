@@ -1,18 +1,34 @@
 #!/bin/bash
-hostname tomcat-server
-sudo amazon-linux-extras install java-openjdk11 -y
-sudo yum install git wget -y
-sudo mkdir /tomcat
-cd tomcat
-sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
-sudo tar -xvzf /tomcat/apache-tomcat-9.0.70.tar.gz
-sudo mv /tomcat/apache-tomcat-9.0.70 /tomcat/apache-tomcat-9
 
-sudo chmod +x /tomcat/apache-tomcat-9/bin/startup.sh 
+# Set hostname
+hostname tomcat-server
+
+# Install Java OpenJDK 11
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+
+# Install necessary tools
+sudo apt install git wget -y
+
+# Create directory for Tomcat installation
+sudo mkdir /tomcat
+cd /tomcat
+
+# Download and extract Apache Tomcat
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.19/bin/apache-tomcat-10.1.19.tar.gz
+sudo tar -xvzf apache-tomcat-10.1.19.tar.gz
+sudo mv apache-tomcat-10.1.19 tomcat
+
+# Make startup and shutdown scripts executable
+sudo chmod +x /tomcat/tomcat/bin/startup.sh 
 sudo chmod +x /tomcat/apache-tomcat-9/bin/shutdown.sh
 
-sudo ln -s /tomcat/apache-tomcat-9/bin/startup.sh /usr/local/bin/tomcatup
-sudo ln -s /tomcat/apache-tomcat-9/bin/shutdown.sh /usr/local/bin/tomcatdown
-tomcatup
+# Create symbolic links for convenience
+sudo ln -s /tomcat/tomcat/bin/startup.sh /usr/local/bin/tomcatup
+sudo ln -s /tomcat/tomcat/bin/shutdown.sh /usr/local/bin/tomcatdown
 
-sudo yum update -y
+# Start Tomcat
+sudo tomcatup
+
+# Update the system
+sudo apt upgrade -y
