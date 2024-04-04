@@ -1,30 +1,25 @@
 resource "aws_instance" "web1" {
-  ami                    = "ami-07c589821f2b353aa"
-  instance_type          = "t2.large"
+  ami                    = "ami-031134f7a79b6e424"
+  instance_type          = "t2.micro"
   key_name               = "Jenkins"
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
-   user_data              = templatefile("./masterjenkins.sh", {})
-
+  user_data              = templatefile("./Jenkins.sh", {})
 
   tags = {
-    Name = "masterjenkins"
+    Name = "jenkins"
   }
-
-  
-
-  
 
   root_block_device {
     volume_size = 30
   }
 }
 
-resource "aws_security_group" "masterjenkins_sg" {
-  name        = "masterjenkins_sg"
+resource "aws_security_group" "jenkins_sg" {
+  name        = "jenkins_sg_unique"  # Change the name to make it unique
   description = "Allow TLS inbound traffic"
 
   ingress = [
-    for port in [22, 443, 80, 8080] : {
+    for port in [22,8080] : {
       description      = "inbound rules"
       from_port        = port
       to_port          = port
@@ -47,7 +42,4 @@ resource "aws_security_group" "masterjenkins_sg" {
   tags = {
     Name = "masterjenkins_sg"
   }
-
-
-
 }
