@@ -1,30 +1,21 @@
-resource "aws_instance" "web" {
-  ami                    = "ami-07c589821f2b353aa"
-  instance_type          = "t2.micro"
-  key_name               = "Jenkins"
-  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
-   user_data              = templatefile("./tomcat.sh", {})
-
-
-  tags = {
-    Name = "tomcat"
-  }
-
-  
-
-  
-
-  root_block_device {
-    volume_size = 30
-  }
+resource "aws_instance" "web2" {
+ami                    = "ami-0eba6c58b7918d3a1"
+instance_type          = "t2.micro"
+key_name               = "Jenkins"
+vpc_security_group_ids = [aws_security_group.tomcat_sg.id]
+user_data              = templatefile("./Tomcat.sh", {})
+tags = {
+Name = "Tomcat"
 }
-
+root_block_device {
+volume_size = 30
+}
+}
 resource "aws_security_group" "tomcat_sg" {
-  name        = "tomcat_sg"
-  description = "Allow TLS inbound traffic"
-
-  ingress = [
-    for port in [22, 443, 80, 8080] : {
+name        = "tomcat_sg"
+description = "Allow TLS inbound traffic"
+ingress = [
+for port in [22,8080] : {
       description      = "inbound rules"
       from_port        = port
       to_port          = port
@@ -43,11 +34,7 @@ resource "aws_security_group" "tomcat_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    Name = "tomcat"
+tags = {
+    Name = "tomcat_sg"
   }
-
-
-
 }
