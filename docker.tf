@@ -2,7 +2,7 @@ resource "aws_instance" "web2" {
   ami                    = "ami-07c589821f2b353aa"
   instance_type          = "t2.micro"
   key_name               = "Jenkins"
-  vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
+  vpc_security_group_ids = [aws_security_group.docker_sg.id]
    user_data              = templatefile("./docker.sh", {})
 
 
